@@ -48,6 +48,10 @@ class Record(Field):
         for i in range(len(self.phones)):
             if self.phones[i].value == phone:
                 self.phones[i] = Phone(new_phone)
+                return
+        raise ValueError("There are no this phone")
+         
+          
 
     def __str__(self):
         return f"Contact name: {self.name}, phones: {'; '.join(str(p) for p in self.phones)}"
