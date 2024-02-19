@@ -14,14 +14,14 @@ class Name(Field):
 
 
 class Phone(Field):
-    def __init__(self, phone):
-        if len(phone) == 10:
-            self.phone = phone
+    def __init__(self, value):
+        if len(value) == 10 and value.isdigit():
+            self.value = value
         else:
-            raise ValueError("Number must have 10 numbers")
+            raise ValueError("Number must have 10 numbers and contain only digits")
 
     def __str__(self):
-        return str(self.phone)
+        return str(self.value)
 
 
 class Record(Field):
@@ -35,20 +35,18 @@ class Record(Field):
 
     def find_phone(self, phone):
         for i in self.phones:
-            if str(i) == phone:
+            if i.value == phone:
                 return i
-            elif not str(i) in self.phones:
-                return "There are no this phone"
+        return None
 
     def remove_phone(self, phone):
         for i in self.phones:
-            if str(i) == phone:
+            if i.value == phone:
                 self.phones.remove(i)
 
     def edit_phone(self, phone, new_phone):
-
         for i in range(len(self.phones)):
-            if str(self.phones[i]) == phone:
+            if self.phones[i].value == phone:
                 self.phones[i] = Phone(new_phone)
 
     def __str__(self):
@@ -58,7 +56,7 @@ class Record(Field):
 class AddressBook(UserDict):
 
     def add_record(self, record: Record):
-        self.data[record.name.value] = [str(phone) for phone in record.phones]
+        self.data[record.name.value] = record
 
     def find(self, name):
         if name in self.data:
@@ -70,13 +68,3 @@ class AddressBook(UserDict):
 
 
 
-
-
-book = AddressBook()
-john_record = Record("John")
-john_record.add_phone("1234567890")
-john_record.add_phone("5555555555")
-john_record.edit_phone("1234567890", "1112223333")
-print(john_record)
-found_phone = john_record.find_phone("1112223333")
-print(found_phone)
